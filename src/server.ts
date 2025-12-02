@@ -50,6 +50,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("This is a get request test");
 });
 
+// users crud operations
 app.post("/users", async (req: Request, res: Response) => {
   const { name, email, age, phone, address } = req.body;
 
@@ -67,6 +68,40 @@ app.post("/users", async (req: Request, res: Response) => {
 
     // res.status(200).send({ message: "Data Inserted Successfully" });
     console.log(req.body);
+  } catch (err: any) {
+    res.status(500).json({ success: false, mesage: err.message });
+  }
+});
+
+app.get("/users", async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query("SELECT * FROM users");
+    res.status(200).json({
+      success: true,
+      message: "Users Retrieved Successfully",
+      data: result.rows,
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, mesage: err.message });
+  }
+});
+
+app.get("/users/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+
+    if (result.rows.length === 0) {
+      res.status(404).json({ success: false, message: "User Not Found" });
+      return;
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "User Retrieved Successfully",
+        data: result.rows[0],
+      });
+    }
   } catch (err: any) {
     res.status(500).json({ success: false, mesage: err.message });
   }
