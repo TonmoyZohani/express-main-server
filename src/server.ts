@@ -13,16 +13,18 @@ const pool = new Pool({
 });
 
 const initDB = async () => {
-  await pool.query(`CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    age INT,
-    phone VARCHAR(255), 
-    address TEXT,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
-  )`);
+  await pool.query(`
+        CREATE TABLE IF NOT EXISTS users(
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(150) UNIQUE NOT NULL,
+        age INT,
+        phone VARCHAR(15),
+        address TEXT,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+        )
+        `);
 
   await pool.query(`
             CREATE TABLE IF NOT EXISTS todos(
@@ -42,7 +44,7 @@ initDB();
 
 //parser
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("This is a get request test");
@@ -56,7 +58,14 @@ app.post("/users", async (req: Request, res: Response) => {
       `INSERT INTO users (name, email, age, phone, address) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
       [name, email, age, phone, address]
     );
-    res.status(200).send({ message: "Data Inserted Successfully" });
+
+    res.status(201).json({
+      success: true,
+      message: "Data Inserted Successfully",
+      data: result.rows[0],
+    });
+
+    // res.status(200).send({ message: "Data Inserted Successfully" });
     console.log(req.body);
   } catch (err: any) {
     res.status(500).json({ success: false, mesage: err.message });
