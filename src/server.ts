@@ -20,41 +20,6 @@ app.get("/", logger, (req: Request, res: Response) => {
 
 app.use("/users", userRouter);
 
-// app.post("/users", async (req: Request, res: Response) => {
-//   const { name, email, age, phone, address } = req.body;
-
-//   try {
-//     const result = await pool.query(
-//       `INSERT INTO users (name, email, age, phone, address) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-//       [name, email, age, phone, address]
-//     );
-
-//     res.status(201).json({
-//       success: true,
-//       message: "Data Inserted Successfully",
-//       data: result.rows[0],
-//     });
-
-//     // res.status(200).send({ message: "Data Inserted Successfully" });
-//     console.log(req.body);
-//   } catch (err: any) {
-//     res.status(500).json({ success: false, mesage: err.message });
-//   }
-// });
-
-app.get("/users", async (req: Request, res: Response) => {
-  try {
-    const result = await pool.query("SELECT * FROM users");
-    res.status(200).json({
-      success: true,
-      message: "Users Retrieved Successfully",
-      data: result.rows,
-    });
-  } catch (err: any) {
-    res.status(500).json({ success: false, mesage: err.message });
-  }
-});
-
 app.get("/users/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
