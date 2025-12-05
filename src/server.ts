@@ -17,28 +17,8 @@ app.get("/", logger, (req: Request, res: Response) => {
 });
 
 // users crud operations
-
 app.use("/users", userRouter);
-app.delete("/users/:id", async (req: Request, res: Response) => {
-  const { id } = req.params;
 
-  try {
-    const result = await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
-
-    if (result.rowCount === 0) {
-      res.status(404).json({ success: false, message: "User Not Found" });
-      return;
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "User Deleted Successfully",
-        data: result.rows[0],
-      });
-    }
-  } catch (err: any) {
-    res.status(500).json({ success: false, mesage: err.message });
-  }
-});
 
 //todos crud operations
 app.post("/todos", async (req: Request, res: Response) => {
