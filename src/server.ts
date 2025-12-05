@@ -3,6 +3,7 @@ import { initDB, pool } from "./config/db";
 import logger from "./middleware/logger";
 import { userRouter } from "./modules/user/user.routes";
 import { todoRoutes } from "./modules/todo/todo.routes";
+import { authRoutes } from "./modules/auth/auth.routes";
 
 const app = express();
 const port = 5000;
@@ -20,7 +21,7 @@ app.get("/", logger, (req: Request, res: Response) => {
 // users crud operations
 app.use("/users", userRouter);
 app.use("/todos", todoRoutes);
-
+app.use("/auth", authRoutes);
 
 //todos crud operations
 // app.post("/todos", async (req: Request, res: Response) => {

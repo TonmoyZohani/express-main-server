@@ -1,6 +1,6 @@
 import { pool } from "../../config/db";
 
-const createTodo = async (payload: Record<string, any>) => {
+const createTodo = async (payload: Record<string, unknown>) => {
   const { user_id, title, completed } = payload;
   const result = await pool.query(
     `INSERT INTO todos(user_id, title,completed) VALUES($1, $2, $3) RETURNING *`,
@@ -19,7 +19,7 @@ const getSingleTodo = async (id: string) => {
   return result;
 };
 
-const updateTodo = async (payload: Record<string, any>) => {
+const updateTodo = async (payload: Record<string, unknown>) => {
   const { id, title, completed } = payload;
   const result = await pool.query(
     `UPDATE todos SET title = $1, completed = $2 WHERE id = $3 RETURNING *`,
