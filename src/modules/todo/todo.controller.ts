@@ -53,7 +53,7 @@ const getSingleTodo = async (req: Request, res: Response) => {
 
 const updateTodo = async (req: Request, res: Response) => {
   try {
-    const result = await todoServices.updateTodo(req.body);
+    const result = await todoServices.updateTodo(req.body, req.params.id!);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Todo not found" });
@@ -81,7 +81,7 @@ const deleteTodo = async (req: Request, res: Response) => {
   }
 };
 
-export const todoController = {
+export const todoControllers = {
   createTodo,
   getTodos,
   getSingleTodo,

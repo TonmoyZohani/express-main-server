@@ -1,8 +1,8 @@
 import { Pool } from "pg";
 import config from ".";
 
-
-const pool = new Pool({
+//DB
+export const pool = new Pool({
   connectionString: `${config.connection_str}`,
 });
 
@@ -11,8 +11,9 @@ const initDB = async () => {
         CREATE TABLE IF NOT EXISTS users(
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
+        role VARCHAR(50) NOT NULL,
         email VARCHAR(150) UNIQUE NOT NULL,
-        password VARCHAR(150) NOT NULL,
+        password TEXT NOT NULL,
         age INT,
         phone VARCHAR(15),
         address TEXT,
@@ -35,4 +36,4 @@ const initDB = async () => {
             `);
 };
 
-export { pool, initDB };
+export default initDB;
